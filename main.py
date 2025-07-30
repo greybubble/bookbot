@@ -1,4 +1,5 @@
 from stats import count_words, count_symbol_frequency, create_sorted_list
+import sys
 
 def get_book_text(path_to_book):
     with open(path_to_book) as text:
@@ -18,17 +19,23 @@ def generate_freq_report(freq_list, word_count, path_to_book):
 
 def main():
 
-    path_to_frank = "books/frankenstein.txt"
+    if(len(sys.argv) < 2):
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
 
-    frankenstein = get_book_text(path_to_frank)
- #   print(count_words(frankenstein), "words found in the document")
+    try:
+
+        path_to_book = sys.argv[1]
+
+        book = get_book_text(path_to_book)
     
-    symbol_count = count_symbol_frequency(frankenstein)
+        symbol_count = count_symbol_frequency(book)
 
- #   print(symbol_count)
+        sorted_list = create_sorted_list(symbol_count)
 
-    sorted_list = create_sorted_list(symbol_count)
+        generate_freq_report(sorted_list, count_words(book), path_to_book)
 
-    generate_freq_report(sorted_list, count_words(frankenstein), path_to_frank)
+    except Exception as e:
+        print(f"Error encountered: {e}")
 
 main()
